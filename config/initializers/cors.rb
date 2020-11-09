@@ -14,3 +14,18 @@
 #       methods: [:get, :post, :put, :patch, :delete, :options, :head]
 #   end
 # end
+Rails.application.config.middleware.insert_before 0, Rack::Cors do
+  allow do
+
+    if Rails.env.production?
+      origins 'https://rosoga.herokuapp.com'
+    else
+     origins 'http://localhost:3000'
+   end
+     #example.com
+
+    resource '*',
+      headers: :any,
+      methods: [:get, :post, :put, :patch, :delete, :options, :head]
+  end
+end
