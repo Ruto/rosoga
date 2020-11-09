@@ -1,0 +1,19 @@
+<h1>Email Confirmation</h1>
+
+<h3>Hi <%= @user.username %></h3>
+<p>
+  Your email confirmation token is <h4><%= @user.email_token %></h4>. Use it to verify your account once you are logged in.
+</p>
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>Hi <%= @user.username %></h1>
+    <p>
+      Sample mail sent using smtp.
+    </p>
+  </body>
+</html>
