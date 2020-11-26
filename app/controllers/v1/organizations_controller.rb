@@ -62,5 +62,46 @@ module V1
       def organization_params
         params.permit(:name, :alias, :type, :ancestry, :category, :income, :direct_expense, :indirect_expense, :administrative_cost, :active, :organization_id, :organizable_id, :organizable_type, :user_id)
       end
+
+      def get_parent
+          if @organization.parent != nil and @organization.structures.empty? != true
+             @organization.parent.structures.first
+          else
+            return nil
+          end
+      end
+
+      def get_income_parent
+          if @structure.parent != nil
+             @organization.parent.structures.find_by_type("Structures::Income")
+          else
+            return nil
+          end
+      end
+      def get_direct_expense_parent
+          if @structure.parent != nil
+             @organization.parent.structures.find_by_type("Structures::DirectExpense")
+            #Structures::DirectExpense.find_by(:structure_id => @structure.parent.id)
+          else
+            return nil
+          end
+      end
+      def get_indirect_expense_parent
+          if @structure.parent != nil
+            @organization.parent.structures.find_by_type("Structures::IndirectExpense")
+            # Structures::IndirectExpense.find_by(:structure_id => @structure.parent.id)
+          else
+            return nil
+          end
+      end
+      def get_adminstrative_cost_parent
+          if @structure.parent != nil
+            @organization.parent.structures.find_by_type("Structures::AdminstrativeCost")
+            # Structures::AdminstrativeCost.find_by(:structure_id => @structure.parent.id)
+          else
+            return nil
+          end
+      end
+      
   end
 end

@@ -51,7 +51,7 @@ module V1
 
       # Only allow a list of trusted parameters through.
       def structure_params
-        params.require(:structure).permit(:name, :alias, :type, :ancestry, :category, :active, :structure_id, :structurable_id, :structurable_type, :user_id)
+        params.permit(:name, :alias, :type, :ancestry, :category, :active, :structure_id, :structurable_id, :structurable_type, :user_id)
       end
   end
 end
