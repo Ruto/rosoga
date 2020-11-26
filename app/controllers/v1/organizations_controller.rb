@@ -20,10 +20,11 @@ module V1
       @organization = Organization.new(organization_params)
       @organization.user_id = @current_user.id
       @organization.type = "Organizations::#{@organization.category}"
+      @organization.parent = get_parent if params[:parent_id] != nil
 
       if @organization.save
 
-        @structure = Structure.create(:name => "#{@organization.name} #{@organization.category.pluralize}", :parent => get_parent, :structurable_id => @organization.id, :structurable_type => "Organization", :category => @organization.category, :user_id => @organization.user_id)
+        @structure = Structure.create(:name => "#{@organization.name} #{@organization.category.pluralize}", :parent => get_structure_parent, :structurable_id => @organization.id, :structurable_type => "Organization", :category => @organization.category, :user_id => @organization.user_id)
         Structure.create(:name => "#{@organization.name} Incomes", :parent => get_income_parent, :type => "Structures::Income", :structurable_id => @organization.id, :structurable_type => "Organization", :category => "Income", :structure_id => @structure.id, :user_id => @organization.user_id, :active => @organization.income)
         Structure.create(:name => "#{@organization.name} DirectExpenses", :parent => get_direct_expense_parent, :type => "Structures::DirectExpense", :structurable_id => @organization.id, :structurable_type => "Organization", :category => "DirectExpense", :structure_id => @structure.id, :user_id => @organization.user_id, :active => @organization.direct_expense)
         Structure.create(:name => "#{@organization.name} IndirectExpenses", :parent => get_indirect_expense_parent, :type => "Structures::IndirectExpense", :structurable_id => @organization.id, :structurable_type => "Organization", :category => "IndirectExpense", :structure_id => @structure.id, :user_id => @organization.user_id, :active => @organization.indirect_expense)
@@ -60,10 +61,14 @@ module V1
 
       # Only allow a list of trusted parameters through.
       def organization_params
-        params.permit(:name, :alias, :type, :ancestry, :category, :income, :direct_expense, :indirect_expense, :administrative_cost, :active, :organization_id, :organizable_id, :organizable_type, :user_id)
+        params.permit(:name, :alias, :type, :parent_id, :category, :income, :direct_expense, :indirect_expense, :administrative_cost, :active, :organization_id, :organizable_id, :organizable_type, :user_id)
       end
 
       def get_parent
+        Organization.find_by_id(params[:parent_id])
+      end
+
+      def get_structure_parent
           if @organization.parent != nil and @organization.structures.empty? != true
              @organization.parent.structures.first
           else
@@ -102,6 +107,6 @@ module V1
             return nil
           end
       end
-      
+
   end
 end
