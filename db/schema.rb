@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_26_100643) do
+ActiveRecord::Schema.define(version: 2020_11_26_111731) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,17 +24,32 @@ ActiveRecord::Schema.define(version: 2020_11_26_100643) do
     t.boolean "income"
     t.boolean "direct_expense"
     t.boolean "indirect_expense"
-    t.boolean "adminstrative_cost"
+    t.boolean "administrative_cost"
     t.boolean "active"
     t.integer "organization_id"
-    t.string "organizable_type", null: false
-    t.bigint "organizable_id", null: false
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["ancestry"], name: "index_organizations_on_ancestry"
-    t.index ["organizable_type", "organizable_id"], name: "index_organizations_on_organizable_type_and_organizable_id"
     t.index ["user_id"], name: "index_organizations_on_user_id"
+  end
+
+  create_table "structures", force: :cascade do |t|
+    t.string "name"
+    t.string "alias"
+    t.string "type"
+    t.string "ancestry"
+    t.string "category"
+    t.boolean "active"
+    t.integer "structure_id"
+    t.string "structurable_type", null: false
+    t.bigint "structurable_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["ancestry"], name: "index_structures_on_ancestry"
+    t.index ["structurable_type", "structurable_id"], name: "index_structures_on_structurable_type_and_structurable_id"
+    t.index ["user_id"], name: "index_structures_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -77,4 +92,5 @@ ActiveRecord::Schema.define(version: 2020_11_26_100643) do
   end
 
   add_foreign_key "organizations", "users"
+  add_foreign_key "structures", "users"
 end
